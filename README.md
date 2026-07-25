@@ -218,4 +218,11 @@ Scoped out deliberately to stay within the brief rather than over-building:
 
 ---
 
+
+## AI Usage
+I used AI to scaffold the initial Express layer structure (routes/controllers/services) and boilerplate for Cheerio parsing and Axios error handling. From there, I made the actual engineering calls myself: how to type and separate error cases (network failure vs. bad status vs. wrong content-type), how to resolve the brief's ambiguous "word count" definition, and the SSRF/rate-limiting tradeoffs noted in Known Limitations. I wrote and reasoned through all tests myself, verifying they actually exercise the parsing logic rather than accepting generated assertions at face value. UI and copy were iterated on directly by me.
+
+---
+
+
 Built for [Digital Heroes](https://digitalheroesco.com) Training Task.
