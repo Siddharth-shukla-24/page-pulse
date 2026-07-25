@@ -1,5 +1,4 @@
 // Point this at your deployed backend URL after Milestone 4.
-// Left as localhost for local dev; swapped at deploy time.
 const API_BASE = window.API_BASE_OVERRIDE || "http://localhost:3000";
 
 const form = document.getElementById("audit-form");
@@ -27,8 +26,6 @@ form.addEventListener("submit", async (e) => {
 
     renderReport(body.data);
   } catch (err) {
-    // Network failure reaching our OWN backend (backend down/unreachable),
-    // distinct from the backend reporting a failure fetching the target URL.
     renderError({
       code: "CLIENT_NETWORK_ERROR",
       message: "Could not reach the audit service. Is the backend running?",
@@ -38,21 +35,28 @@ form.addEventListener("submit", async (e) => {
 
 function setLoading() {
   submitBtn.disabled = true;
-  submitBtn.textContent = "Auditing...";
-  resultArea.innerHTML = `<p class="state-message">Fetching and analyzing the page...</p>`;
+  submitBtn.innerHTML = `<span class="btn-icon">⚡</span> Auditing...`;
+  resultArea.innerHTML = `
+    <div class="loading-box">
+      <span class="spinner"></span>
+      Fetching and analyzing the page...
+    </div>`;
 }
 
 function resetButton() {
   submitBtn.disabled = false;
-  submitBtn.textContent = "Audit";
+  submitBtn.innerHTML = `<span class="btn-icon">⚡</span> Audit`;
 }
 
 function renderError(error) {
   resetButton();
   resultArea.innerHTML = `
     <div class="error-box">
-      <span class="error-code">${escapeHtml(error?.code || "UNKNOWN_ERROR")}</span>
-      ${escapeHtml(error?.message || "Something went wrong.")}
+      <span class="error-icon">⚠️</span>
+      <div class="error-body">
+        <span class="error-code">${escapeHtml(error?.code || "UNKNOWN_ERROR")}</span>
+        ${escapeHtml(error?.message || "Something went wrong.")}
+      </div>
     </div>
   `;
 }
@@ -60,25 +64,33 @@ function renderError(error) {
 function renderReport(data) {
   resetButton();
 
-  const rows = [
-    ["URL", data.url],
-    ["HTTP status", data.httpStatus],
-    ["Response time", `${data.responseTimeMs} ms`],
-    ["Title", data.title || "—"],
-    ["Meta description", data.metaDescription || "—"],
-    ["H1 count", data.h1Count],
-    ["Images missing alt text", data.imagesMissingAltCount],
-    ["Word count (approx.)", data.wordCount],
+  const isOkStatus = data.httpStatus >= 200 && data.httpStatus < 300;
+  const hasAltIssues = data.imagesMissingAltCount > 0;
+
+  const metaBar = `
+    <div class="report-meta">
+      <span>${escapeHtml(data.url)}</span>
+      <span class="status-pill ${isOkStatus ? "ok" : "warn"}">
+        ${isOkStatus ? "●" : "▲"} HTTP ${data.httpStatus}
+      </span>
+    </div>`;
+
+  const cards = [
+    ["⏱", "Response Time", `${data.responseTimeMs} ms`, false],
+    ["🏷", "Title", data.title || "—", false],
+    ["📝", "Meta Description", data.metaDescription || "—", false, true],
+    ["🔠", "H1 Count", data.h1Count, false],
+    ["🖼", "Images Missing Alt", data.imagesMissingAltCount, hasAltIssues],
+    ["📖", "Word Count (approx.)", data.wordCount, false],
   ];
 
-  const rowsHtml = rows
-    .map(
-      ([label, value]) => `
-      <div class="report-row">
-        <span class="label">${escapeHtml(label)}</span>
-        <span class="value">${escapeHtml(String(value))}</span>
-      </div>`
-    )
+  const cardsHtml = cards
+    .map(([icon, label, value, isWarn, isFull]) => `
+      <div class="metric-card ${isFull ? "full" : ""}">
+        <div class="metric-label">${icon} ${escapeHtml(label)}</div>
+        <div class="metric-value ${isWarn ? "warn" : ""}">${escapeHtml(String(value))}</div>
+      </div>
+    `)
     .join("");
 
   const altListHtml =
@@ -93,7 +105,7 @@ function renderReport(data) {
         }</ul>`
       : "";
 
-  resultArea.innerHTML = `<div class="report">${rowsHtml}</div>${altListHtml}`;
+  resultArea.innerHTML = `${metaBar}<div class="card-grid">${cardsHtml}</div>${altListHtml}`;
 }
 
 function escapeHtml(str) {

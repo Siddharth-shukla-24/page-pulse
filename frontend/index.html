@@ -7,31 +7,41 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="wrap">
-    <header class="head">
-      <h1>Page Pulse</h1>
-      <p class="sub">Fetch any URL. Get its vitals.</p>
-    </header>
+  <div class="shell">
+    <main class="wrap">
+      <header class="head">
+        <div class="brand">
+          <span class="brand-icon">◉</span>
+          <h1>Page Pulse</h1>
+        </div>
+        <p class="sub">Fetch any URL. Get its vitals — status, speed, SEO &amp; accessibility signals.</p>
+      </header>
 
-    <form id="audit-form" class="audit-form">
-      <input
-        id="url-input"
-        type="text"
-        placeholder="https://example.com"
-        autocomplete="off"
-        required
-      />
-      <button type="submit" id="submit-btn">Audit</button>
-    </form>
+      <form id="audit-form" class="audit-form">
+        <div class="input-wrap">
+          <span class="input-icon">🔗</span>
+          <input
+            id="url-input"
+            type="text"
+            placeholder="https://example.com"
+            autocomplete="off"
+            required
+          />
+        </div>
+        <button type="submit" id="submit-btn">
+          <span class="btn-icon">⚡</span> Audit
+        </button>
+      </form>
 
-    <section id="result-area" class="result-area" aria-live="polite"></section>
-  </main>
+      <section id="result-area" class="result-area" aria-live="polite"></section>
+    </main>
 
-  <footer class="site-footer">
-    Built for <a href="https://digitalheroesco.com" target="_blank" rel="noopener">Digital Heroes Training Task</a>
-  </footer>
+    <footer class="site-footer">
+      Built for <a href="https://digitalheroesco.com" target="_blank" rel="noopener">Digital Heroes Training Task</a>
+    </footer>
+  </div>
 
   <script src="config.js"></script>
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
