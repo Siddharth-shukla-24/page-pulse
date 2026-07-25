@@ -1,15 +1,18 @@
 {
   "name": "page-pulse-backend",
   "version": "1.0.0",
-  "description": "URL audit API that analyzes web pages for performance, SEO, and accessibility metrics.",
-  "author": "Siddharth Shukla",
+  "description": "URL audit API — fetches a page and reports status, load time, SEO/accessibility signals.",
+  "author": "Your Full Name",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
   },
+  "main": "src/server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^1.7.9",
@@ -19,6 +22,7 @@
     "express": "^4.21.2"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.1.9"
   }
 }
