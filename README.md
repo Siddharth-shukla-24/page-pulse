@@ -2,8 +2,10 @@
 
 A small web tool that audits any URL — fetches the page, reports HTTP status, response time, title, meta description, H1 count, images missing alt text, and approximate word count.
 
-**Live demo:** [add your deployed URL here]
-**API base URL:** [add your deployed backend URL here]
+**Live demo:** https://wondrous-twilight-6528ba.netlify.app
+**API base URL:** https://page-pulse-miu1.onrender.com
+
+> **Note:** the backend is hosted on Render's free tier, which spins down after inactivity. The first request after idle time can take 20-50 seconds to respond — this is expected cold-start behavior, not a bug. Subsequent requests are fast.
 
 ---
 
