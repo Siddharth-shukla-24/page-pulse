@@ -169,13 +169,13 @@ Returns `{ "status": "ok" }`. Used to verify the deployment is live.
 ## Design decisions
 
 **1. Word count = visible body text only, scripts/styles stripped.**
-"Approximate word count" is ambiguous in the brief — counting raw HTML would include script/style content that no reader ever sees. Stripped `<script>`, `<style>`, `<noscript>` before splitting on whitespace, since that's what "word count" means to an actual page visitor.
+"Approximate word count" is ambiguous in the brief counting raw HTML would include script/style content that no reader ever sees. Stripped `<script>`, `<style>`, `<noscript>` before splitting on whitespace, since that's what "word count" means to an actual page visitor.
 
 **2. Errors are typed by cause, not lumped into one generic failure.**
-Network failure, non-2xx upstream status, and wrong content-type are three different `AppError` codes rather than a single catch-all. A client consuming this API can distinguish "the target site is down" from "the target isn't HTML" and react differently — collapsing them would make the API contract technically simpler but practically useless for a real consumer.
+Network failure, non-2xx upstream status, and wrong content-type are three different `AppError` codes rather than a single catch all. A client consuming this API can distinguish "the target site is down" from "the target isn't HTML" and react differently collapsing them would make the API contract technically simpler but practically useless for a real consumer.
 
 **3. Content-type is checked explicitly before parsing, not caught via exception.**
-Cheerio doesn't throw on non-HTML input — it will silently "parse" a JSON or PDF response into a mostly-empty DOM instead of failing loudly. Relying on try/catch here would produce a false-positive success. An explicit `Content-Type` header check before parsing was the only way to catch this reliably.
+Cheerio doesn't throw on non-HTML input it will silently "parse" a JSON or PDF response into a mostly empty DOM instead of failing loudly. Relying on try/catch here would produce a false-positive success. An explicit `Content-Type` header check before parsing was the only way to catch this reliably.
 
 ---
 
